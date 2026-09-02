@@ -1,8 +1,162 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<SmartPOS.Models.Product>
+
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    /* মডার্ন ও পারফেক্ট ড্যাশবোর্ড কালার প্যালেট */
+    .dashboard-card {
+        border: none;
+        border-radius: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        background: #ffffff;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.06) !important;
+    }
+    
+    /* আইকন এবং টেক্সটের জন্য ব্যালেন্সড কালার */
+    .icon-shape {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+    
+    /* ১. রেভেনিউ - এমারেল্ড গ্রিন */
+    .card-revenue { border-left: 5px solid #10b981; }
+    .icon-revenue { background-color: #ecfdf5; color: #10b981; }
+    
+    /* ২. অর্ডার - রয়্যাল ব্লু */
+    .card-orders { border-left: 5px solid #3b82f6; }
+    .icon-orders { background-color: #eff6ff; color: #3b82f6; }
+    
+    /* ৩. প্রোডাক্ট - ইনডিগো/পার্পল */
+    .card-products { border-left: 5px solid #6366f1; }
+    .icon-products { background-color: #e0e7ff; color: #6366f1; }
+
+    .table-responsive {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+</style>
+
+<!-- হেডার সেকশন -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-dark m-0">Business Dashboard</h3>
+        <span class="text-muted small">Real-time store overview</span>
+    </div>
+    <a href="/Sales/Create" class="btn btn-primary rounded-3 px-4 fw-semibold shadow-sm">
+        <i class="fa-solid fa-plus me-2"></i>New Sale
+    </a>
+</div>
+
+<!-- নতুন প্রফেশনাল কার্ড লেআউট -->
+<div class="row g-3 mb-4">
+    <!-- কার্ড ১: মোট বিক্রি (টাকা) -->
+    <div class="col-12 col-md-4">
+        <div class="card dashboard-card card-revenue shadow-sm p-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small fw-medium text-uppercase">Total Sales</span>
+                    <h3 class="fw-bold text-dark mt-1 mb-0">৳ @ViewBag.TotalSales.ToString("N2")</h3>
+                </div>
+                <div class="icon-shape icon-revenue">
+                    <i class="fa-solid fa-bangladeshi-taka-sign"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- কার্ড ২: মোট অর্ডার -->
+    <div class="col-12 col-md-4">
+        <div class="card dashboard-card card-orders shadow-sm p-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small fw-medium text-uppercase">Total Orders</span>
+                    <h3 class="fw-bold text-dark mt-1 mb-0">@ViewBag.TotalOrders</h3>
+                </div>
+                <div class="icon-shape icon-orders">
+                    <i class="fa-solid fa-file-invoice"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- কার্ড ৩: মোট প্রোডাক্ট -->
+    <div class="col-12 col-md-4">
+        <div class="card dashboard-card card-products shadow-sm p-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small fw-medium text-uppercase">Total Products</span>
+                    <h3 class="fw-bold text-dark mt-1 mb-0">@ViewBag.TotalProducts</h3>
+                </div>
+                <div class="icon-shape icon-products">
+                    <i class="fa-solid fa-box"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- লো স্টক অ্যালার্ট টেবিল -->
+<div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+    <div class="mb-3">
+        <h5 class="fw-bold text-dark m-0">
+            <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Low Stock Warning
+        </h5>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle table-hover m-0">
+            <thead class="table-light text-secondary small text-uppercase">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th class="text-center">Stock</th>
+                    <th class="text-end">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-muted small">
+                            <i class="fa-solid fa-circle-check text-success fs-4 d-block mb-2"></i>
+                            All products are in good stock!
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold text-dark">@item.Name</td>
+                            <td class="text-secondary">৳ @item.Price.ToString("N2")</td>
+                            <td class="text-center">
+                                <span class="badge bg-danger-subtle text-danger px-2.5 py-1.5 rounded fw-bold">@item.StockQuantity Pcs</span>
+                            </td>
+                            <td class="text-end">
+                                @if (item.StockQuantity == 0)
+                                {
+                                    <span class="badge bg-danger text-white px-2 py-1 small rounded">Out of Stock</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark px-2 py-1 small rounded">Low Stock</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
