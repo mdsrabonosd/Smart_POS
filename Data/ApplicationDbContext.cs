@@ -1,16 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SmartPOS.Models;
 
 namespace SmartPOS.Data
 {
-    public class ApplicationDbContext : DbContext
+    // DbContext এর বদলে IdentityDbContext ব্যবহার করা হয়েছে রোল এবং ইউজার টেবিল ম্যানেজ করার জন্য
+    public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
         {
         }
 
-        // এই দুটি লাইন ডাটাবেজে টেবিল তৈরি করতে সাহায্য করবে
-        public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Sale> Sales { get; set; }
+        public DbSet<SaleDetail> SaleDetails { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            // এখানে আপনার পূর্বের কোনো কাস্টম রিলেশনশিপ কনফিগারেশন থাকলে তা থাকবে
+        }
     }
 }
