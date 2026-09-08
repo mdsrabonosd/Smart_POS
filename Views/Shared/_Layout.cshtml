@@ -4,51 +4,178 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SmartPOS</title>
-    <script type="importmap"></script>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SmartPOS.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #f4f6f9;
+            }
+
+            .wrapper {
+                display: flex;
+                align-items: stretch;
+            }
+
+            /* সাইডবারকে ফুল হাইট ও ফ্লেক্সবক্স করা হলো যেন বাটনটি নিচে পুশ হয় */
+            #sidebar {
+                min-width: 260px;
+                max-width: 260px;
+                min-height: 100vh;
+                background: #1e293b;
+                color: #94a3b8;
+                transition: all 0.3s;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+                #sidebar .sidebar-header {
+                    padding: 24px;
+                    background: #0f172a;
+                    color: #fff;
+                    font-size: 1.25rem;
+                    font-weight: 700;
+                    letter-spacing: 0.5px;
+                }
+
+                #sidebar ul li a {
+                    padding: 14px 24px;
+                    font-size: 0.95rem;
+                    font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    color: #cbd5e1;
+                    text-decoration: none;
+                    transition: all 0.2s;
+                    border-left: 4px solid transparent;
+                }
+
+                    #sidebar ul li a i {
+                        margin-right: 12px;
+                        font-size: 1.1rem;
+                        width: 20px;
+                        text-align: center;
+                    }
+
+                    #sidebar ul li a:hover {
+                        background: #334155;
+                        color: #fff;
+                    }
+
+                /* ডায়নামিক অ্যাক্টিভ মেনুর মডার্ন স্টাইল */
+                #sidebar ul li.active a {
+                    background: #0ea5e9;
+                    color: #fff;
+                    border-left: 4px solid #38bdf8;
+                }
+
+            .top-navbar {
+                background: #fff;
+                padding: 15px 30px;
+                border-bottom: 1px solid #e2e8f0;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            }
+
+            #content {
+                width: 100%;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .main-body {
+                padding: 30px;
+                flex: 1;
+            }
+
+            .card-custom {
+                background: #fff;
+                border: none;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                padding: 24px;
+            }
+
+            /* নিউ সেল বাটনের জন্য এক্সক্লুসিভ হোভার অ্যানিমেশন */
+            .btn-pos-sidebar {
+                background-color: #10b981 !important;
+                color: #ffffff !important;
+                border: none;
+                transition: all 0.2s ease-in-out;
+            }
+
+                .btn-pos-sidebar:hover {
+                    background-color: #059669 !important;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+                }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SmartPOS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Categories" asp-action="Index">Category Management</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
+
+    @{
+        // বর্তমান রানিং কন্ট্রোলারের নাম ট্র্যাক করার লজিক (ডায়নামিক মেনুর জন্য)
+        var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    }
+
+    <div class="wrapper">
+        <nav id="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <i class="fa-solid fa-laptop-code me-2 text-info"></i>SmartPOS <span class="badge bg-info text-dark font-monospace" style="font-size: 0.65rem;">PRO</span>
                 </div>
+
+                <ul class="list-unstyled components mt-3">
+                    <li class="@(currentController == "Home" ? "active" : "")">
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="fa-solid fa-chart-pie"></i> Dashboard
+                        </a>
+                    </li>
+
+                    <hr class="mx-3 my-2" style="border-color: #334155;">
+
+                    <li class="@(currentController == "Categories" ? "active" : "")">
+                        <a asp-controller="Categories" asp-action="Index">
+                            <i class="fa-solid fa-tags"></i> Categories
+                        </a>
+                    </li>
+
+                    <li class="@(currentController == "Products" ? "active" : "")">
+                        <a asp-controller="Products" asp-action="Index">
+                            <i class="fa-solid fa-box"></i> Products
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="p-3 border-top" style="border-color: #334155 !important;">
+                <a href="/Sales/Create" class="btn btn-pos-sidebar w-100 py-2.5 rounded-3 fw-bold shadow-sm d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-cash-register me-2"></i>New Sale
+                </a>
             </div>
         </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+        <div id="content">
+            <div class="top-navbar d-flex justify-content-between align-items-center">
+                <h5 class="m-0 text-secondary fw-bold">Control Panel</h5>
+                <div class="user-profile d-flex align-items-center">
+                    <span class="me-2 fw-semibold text-dark">Welcome, Admin</span>
+                    <i class="fa-solid fa-circle-user fs-4 text-secondary"></i>
+                </div>
+            </div>
+
+            <div class="main-body">
+                @RenderBody()
+            </div>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - SmartPOS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

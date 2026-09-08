@@ -3,9 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using SmartPOS.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization; // এই ইউজিং স্টেটমেন্টটি উপরে যোগ করবেন
+
+
 
 namespace SmartPOS.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;

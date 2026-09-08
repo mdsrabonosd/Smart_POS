@@ -19,7 +19,6 @@ namespace SmartPOS.Models
         [Range(0, 10000, ErrorMessage = "স্টক ০ বা তার বেশি হতে হবে")]
         public int StockQuantity { get; set; }
 
-        // Category টেবিলের সাথে সম্পর্ক (Relationship) তৈরি করা
         [Required(ErrorMessage = "একটি ক্যাটাগরি সিলেক্ট করুন")]
         public int CategoryId { get; set; }
 

@@ -12,11 +12,12 @@
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         background: #ffffff;
     }
-    .dashboard-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.06) !important;
-    }
-    
+
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06) !important;
+        }
+
     /* আইকন এবং টেক্সটের জন্য ব্যালেন্সড কালার */
     .icon-shape {
         width: 48px;
@@ -27,18 +28,36 @@
         justify-content: center;
         font-size: 22px;
     }
-    
+
     /* ১. রেভেনিউ - এমারেল্ড গ্রিন */
-    .card-revenue { border-left: 5px solid #10b981; }
-    .icon-revenue { background-color: #ecfdf5; color: #10b981; }
-    
+    .card-revenue {
+        border-left: 5px solid #10b981;
+    }
+
+    .icon-revenue {
+        background-color: #ecfdf5;
+        color: #10b981;
+    }
+
     /* ২. অর্ডার - রয়্যাল ব্লু */
-    .card-orders { border-left: 5px solid #3b82f6; }
-    .icon-orders { background-color: #eff6ff; color: #3b82f6; }
-    
+    .card-orders {
+        border-left: 5px solid #3b82f6;
+    }
+
+    .icon-orders {
+        background-color: #eff6ff;
+        color: #3b82f6;
+    }
+
     /* ৩. প্রোডাক্ট - ইনডিগো/পার্পল */
-    .card-products { border-left: 5px solid #6366f1; }
-    .icon-products { background-color: #e0e7ff; color: #6366f1; }
+    .card-products {
+        border-left: 5px solid #6366f1;
+    }
+
+    .icon-products {
+        background-color: #e0e7ff;
+        color: #6366f1;
+    }
 
     .table-responsive {
         border-radius: 8px;
@@ -57,9 +76,7 @@
     </a>
 </div>
 
-<!-- নতুন প্রফেশনাল কার্ড লেআউট -->
 <div class="row g-3 mb-4">
-    <!-- কার্ড ১: মোট বিক্রি (টাকা) -->
     <div class="col-12 col-md-4">
         <div class="card dashboard-card card-revenue shadow-sm p-4">
             <div class="d-flex align-items-center justify-content-between">
@@ -105,7 +122,6 @@
     </div>
 </div>
 
-<!-- লো স্টক অ্যালার্ট টেবিল -->
 <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
     <div class="mb-3">
         <h5 class="fw-bold text-dark m-0">
