@@ -7,13 +7,11 @@ namespace SmartPOS.Models
     {
         public int Id { get; set; }
 
-        // Foreign Key to Sale
         [Required]
         public int SaleId { get; set; }
         [ForeignKey("SaleId")]
         public virtual Sale? Sale { get; set; }
 
-        // Foreign Key to Product
         [Required]
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
@@ -28,6 +26,6 @@ namespace SmartPOS.Models
 
         [Required]
         [DataType(DataType.Currency)]
-        public decimal TotalPrice { get; set; } // Quantity * UnitPrice
+        public decimal TotalPrice { get; set; } 
     }
 }

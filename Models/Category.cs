@@ -4,7 +4,7 @@ namespace SmartPOS.Models
 {
     public class Category
     {
-        [Key] // এটি ডাটাবেজে Primary Key (ID) তৈরি করবে
+        [Key] 
         public int Id { get; set; }
 
         [Required(ErrorMessage = "ক্যাটাগরির নাম দিতেই হবে")]

@@ -132,13 +132,11 @@
             updateCartUI();
         }
 
-        // ২. কার্ট থেকে কোনো প্রোডাক্ট সম্পূর্ণ রিমুভ করা
         function removeFromCart(id) {
             cart = cart.filter(item => item.productId != id);
             updateCartUI();
         }
 
-        // ৩. কোয়ান্টিটি ইনপুট সরাসরি চেঞ্জ করলে হ্যান্ডেল করা
         function updateQuantity(id, qtyValue, stock) {
             let item = cart.find(item => item.productId == id);
             let qty = parseInt(qtyValue);
@@ -155,7 +153,6 @@
             updateCartUI();
         }
 
-        // ৪. কার্টের ইন্টারফেস (UI) এবং হিসাব-নিকাশ আপডেট করা
         function updateCartUI() {
             const tbody = document.getElementById("cartTableBody");
             tbody.innerHTML = "";
@@ -198,7 +195,6 @@
                 tbody.innerHTML += row;
             });
 
-            // ডাইনামিক ট্যাক্স রেট রিড করা
             let taxPercentageInput = parseFloat(document.getElementById("txtTaxPercentage").value);
             let taxRate = isNaN(taxPercentageInput) || taxPercentageInput < 0 ? 0 : taxPercentageInput / 100;
 
@@ -210,7 +206,6 @@
             document.getElementById("lblGrandTotal").innerText = `${grandTotal.toFixed(2)}`;
         }
 
-        // ৫. পুরো বিলের ডাটা AJAX এর মাধ্যমে কন্ট্রোলারে পাঠানো
         function submitSale() {
             if (cart.length === 0) {
                 alert("Please add at least one product to the cart.");
@@ -242,7 +237,6 @@
             .then(data => {
                 if (data.success) {
                     alert("🎉 Sale completed successfully!");
-                    // সফলভাবে সেভ হওয়ার পর জেনারেট হওয়া আইডি দিয়ে ইনভয়েস পেজে রিডাইরেক্ট
                     window.location.href = '/Sales/Invoice/' + data.invoiceId;
                 } else {
                     alert("Error: " + data.message);

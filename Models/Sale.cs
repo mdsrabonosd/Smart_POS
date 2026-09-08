@@ -9,11 +9,11 @@ namespace SmartPOS.Models
 
         [Required]
         [Display(Name = "Invoice No")]
-        public string InvoiceNumber { get; set; } = string.Empty; // e.g., INV-20260628-001
+        public string InvoiceNumber { get; set; } = string.Empty; 
 
         [Required]
         [Display(Name = "Customer Name")]
-        public string CustomerName { get; set; } = "Walking Customer"; // ডিফল্ট কাস্টমার
+        public string CustomerName { get; set; } = "Walking Customer"; 
 
         [Required]
         [DataType(DataType.DateTime)]
@@ -25,13 +25,12 @@ namespace SmartPOS.Models
 
         [Required]
         [DataType(DataType.Currency)]
-        public decimal Tax { get; set; } // ৫% ভ্যাট বা ট্যাক্স
+        public decimal Tax { get; set; } 
 
         [Required]
         [DataType(DataType.Currency)]
         public decimal GrandTotal { get; set; }
 
-        // Navigation Property: একটি সেলের আন্ডারে অনেকগুলো আইটেম থাকতে পারে
         public virtual ICollection<SaleDetail> SaleDetails { get; set; } = new List<SaleDetail>();
     }
 }

@@ -8,7 +8,6 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
-            <!-- ওয়ার্নিং আইকন মেকানিজম -->
             <div class="mb-3 text-danger">
                 <i class="fa-solid fa-circle-exclamation fs-1 animate__animated animate__pulse animate__infinite"></i>
             </div>
@@ -16,7 +15,6 @@
             <h4 class="fw-bold text-dark mb-2">Are you absolutely sure?</h4>
             <p class="text-muted small mb-4">You are about to permanently delete this product from the inventory. This action cannot be undone.</p>
 
-            <!-- প্রোডাক্ট ইনফো কার্ড -->
             <div class="bg-light rounded-3 p-3 mb-4 text-start border">
                 <div class="mb-2">
                     <small class="text-secondary d-block fw-semibold">Product Name</small>
@@ -34,7 +32,6 @@
                 </div>
             </div>
 
-            <!-- ডিলিট ফর্ম এবং বাটনসমূহ -->
             <form asp-action="Delete" method="post">
                 @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="Id" />
