@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SmartPOS Premium</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #f4f6f9;
+            }
+            .wrapper {
+                display: flex;
+                align-items: stretch;
+            }
+            /* Sidebar Design - Modern Slate/Navy mix */
+            #sidebar {
+                min-width: 260px;
+                max-width: 260px;
+                min-height: 100vh;
+                background: #1e293b; /* Modern Tailwind Slate-800 */
+                color: #94a3b8;
+                transition: all 0.3s;
+            }
+            #sidebar .sidebar-header {
+                padding: 24px;
+                background: #0f172a; /* Darker Slate-900 */
+                color: #fff;
+                font-size: 1.25rem;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+            }
+            #sidebar ul li a {
+                padding: 14px 24px;
+                font-size: 0.95rem;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                color: #cbd5e1;
+                text-decoration: none;
+                transition: all 0.2s;
+                border-left: 4px solid transparent;
+            }
+            #sidebar ul li a i {
+                margin-right: 12px;
+                font-size: 1.1rem;
+                width: 20px;
+                text-align: center;
+            }
+            #sidebar ul li a:hover {
+                background: #334155;
+                color: #fff;
+            }
+            #sidebar ul li.active a {
+                background: #0ea5e9; /* Premium Cyan/Blue Action Color */
+                color: #fff;
+                border-left: 4px solid #38bdf8;
+            }
+            /* Top Navigation Bar */
+            .top-navbar {
+                background: #fff;
+                padding: 15px 30px;
+                border-bottom: 1px solid #e2e8f0;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            }
+            /* Main Content Area */
+            #content {
+                width: 100%;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            .main-body {
+                padding: 30px;
+                flex: 1;
+            }
+            /* Card Styling for Professional Content Blocks */
+            .card-custom {
+                background: #fff;
+                border: none;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                padding: 24px;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-laptop-code me-2 text-info"></i>SmartPOS <span class="badge bg-info text-dark font-monospace" style="font-size: 0.65rem;">PRO</span>
+            </div>
+
+            <ul class="list-unstyled components mt-3">
+                <li>
+                    <a asp-controller="Home" asp-action="Index">
+                        <i class="fa-solid fa-globe"></i> View Website
+                    </a>
+                </li>
+                <hr class="mx-3 my-2" style="border-color: #334155;">
+                <li class="active">
+                    <a asp-controller="Categories" asp-action="Index">
+                        <i class="fa-solid fa-tags"></i> Categories
+                    </a>
+                </li>
+                <li>
+    <a asp-controller="Products" asp-action="Index">
+        <i class="fa-solid fa-box"></i> Products
+    </a>
+</li>
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-cart-shopping"></i> POS Terminal
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-chart-line"></i> Sales Report
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="content">
+            <div class="top-navbar d-flex justify-content-between align-items-center">
+                <h5 class="m-0 text-secondary font-weight-bold">Control Panel</h5>
+                <div class="user-profile d-flex align-items-center">
+                    <span class="me-2 fw-semibold text-dark">Welcome, Admin</span>
+                    <i class="fa-solid fa-circle-user fs-4 text-secondary"></i>
+                </div>
+            </div>
+
+            <div class="main-body">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

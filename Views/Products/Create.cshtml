@@ -1,0 +1,71 @@
+﻿@model SmartPOS.Models.Product
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Add Product";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card-custom">
+            <div class="mb-4">
+                <h4 class="mb-1 text-dark fw-bold">Add New Product</h4>
+                <small class="text-muted">Input item details to add it to the inventory stock</small>
+            </div>
+
+            <!-- ফর্ম শুরু -->
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+                    <!-- প্রোডাক্টের নাম -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Name" class="form-label fw-semibold text-secondary">Product Name</label>
+                        <input asp-for="Name" class="form-control px-3 py-2" placeholder="e.g. Rice, Coca-Cola, T-Shirt" autofocus />
+                        <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- ক্যাটাগরি ড্রপডাউন (The Interview Flex) -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="CategoryId" class="form-label fw-semibold text-secondary">Select Category</label>
+                        <select asp-for="CategoryId" class="form-select px-3 py-2" 
+                                asp-items="@(new SelectList(ViewBag.CategoryList, "Id", "Name"))">
+                            <option value="">-- Choose Category --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger small mt-1 d-block"></span>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!-- প্রোডাক্টের দাম -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Price" class="form-label fw-semibold text-secondary">Selling Price ($)</label>
+                        <input asp-for="Price" type="number" step="0.01" class="form-control px-3 py-2" placeholder="0.00" />
+                        <span asp-validation-for="Price" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- স্টকের পরিমাণ -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="StockQuantity" class="form-label fw-semibold text-secondary">Stock Quantity (Pcs)</label>
+                        <input asp-for="StockQuantity" type="number" class="form-control px-3 py-2" placeholder="0" />
+                        <span asp-validation-for="StockQuantity" class="text-danger small mt-1 d-block"></span>
+                    </div>
+                </div>
+
+                <!-- বাটনসমূহ -->
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a asp-action="Index" class="btn btn-light px-4">
+                        <i class="fa-solid fa-arrow-left me-2"></i>Back to Inventory
+                    </a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fa-solid fa-floppy-disk me-2"></i>Save Product
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

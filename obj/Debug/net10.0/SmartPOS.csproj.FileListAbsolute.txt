@@ -275,8 +275,6 @@ C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\compressed\og0jvb
 C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\compressed\5aysux7a2g-{0}-muycvpuwrr-muycvpuwrr.gz
 C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\compressed\74dosyuwsu-{0}-87fc7y1x7t-87fc7y1x7t.gz
 C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\compressed\1zk2qbpxbx-{0}-mlv21k5csn-mlv21k5csn.gz
-C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\compressed\8o8pgynyin-{0}-bfw3v3x341-bfw3v3x341.gz
-C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\compressed\wrx5r1mxb7-{0}-bfw3v3x341-bfw3v3x341.gz
 C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\staticwebassets.build.json
 C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\staticwebassets.build.json.cache
 C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\staticwebassets.development.json
@@ -289,3 +287,7 @@ C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\refint\SmartPOS.d
 C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\SmartPOS.pdb
 C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\SmartPOS.genruntimeconfig.cache
 C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\ref\SmartPOS.dll
+C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\SmartPOS.sourcelink.json
+C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\scopedcss\Views\Shared\_AdminLayout.cshtml.rz.scp.css
+C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\compressed\8o8pgynyin-{0}-2l3happt88-2l3happt88.gz
+C:\Users\User\source\repos\SmartPOS\SmartPOS\obj\Debug\net10.0\compressed\wrx5r1mxb7-{0}-2l3happt88-2l3happt88.gz

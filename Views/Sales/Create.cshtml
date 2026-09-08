@@ -1,0 +1,257 @@
+﻿@model SmartPOS.Models.Sale
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "POS Counter";
+    var products = ViewBag.Products as List<SmartPOS.Models.Product> ?? new List<SmartPOS.Models.Product>();
+}
+
+<div class="row g-4">
+    <!-- বাম পাশ: প্রোডাক্ট সিলেকশন প্যানেল -->
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold text-dark m-0"><i class="fa-solid fa-boxes-stacked me-2 text-primary"></i>Available Products</h5>
+                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-medium">@products.Count Items</span>
+            </div>
+
+            <!-- প্রোডাক্ট গ্রিড লেআউট -->
+            <div class="row row-cols-1 row-cols-md-3 g-3" style="max-height: 650px; overflow-y: auto;">
+                @foreach (var p in products)
+                {
+                    <div class="col">
+                        <div class="card h-100 border rounded-3 product-card p-3 d-flex flex-column justify-content-between text-center shadow-sm hover-actions"
+                             onclick="addToCart('@p.Id', '@p.Name', @p.Price, @p.StockQuantity)" style="cursor: pointer;">
+                            <div>
+                                <div class="avatar-md bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 text-primary fs-4">
+                                    <i class="fa-solid fa-box"></i>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-1 text-truncate">@p.Name</h6>
+                                <span class="text-muted small d-block mb-2">Stock: @p.StockQuantity Pcs</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <span class="fw-bold text-success fs-5">@p.Price</span>
+                                <button class="btn btn-sm btn-primary rounded-circle"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- ডান পাশ: ডাইনামিক বিলিং কার্ট প্যানেল -->
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+                <div class="border-b pb-3 mb-3">
+                    <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-receipt me-2 text-success"></i>Current Invoice</h5>
+                    <span class="badge bg-light text-secondary border fw-mono">@ViewBag.InvoiceNumber</span>
+                </div>
+
+                <!-- কাস্টমার এবং ট্যাক্স ইনপুট -->
+                <div class="mb-3 row g-2">
+                    <div class="col-md-8">
+                        <label class="form-label small fw-semibold text-secondary">Customer Name</label>
+                        <input type="text" id="customerName" class="form-control" value="Walking Customer" placeholder="Enter customer name" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold text-secondary">Tax / VAT (%)</label>
+                        <input type="number" id="txtTaxPercentage" class="form-control text-center" value="0" min="0" max="100" oninput="updateCartUI()" />
+                    </div>
+                </div>
+
+                <!-- কার্ট টেবিল -->
+                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                    <table class="table align-middle">
+                        <thead class="table-light small text-uppercase">
+                            <tr>
+                                <th>Item</th>
+                                <th width="100">Qty</th>
+                                <th width="90">Total</th>
+                                <th width="40"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cartTableBody">
+                            <tr id="emptyCartRow">
+                                <td colspan="4" class="text-center py-5 text-muted small">
+                                    <i class="fa-solid fa-cart-shopping fs-3 d-block mb-2 text-black-50"></i>
+                                    Cart is empty. Click a product to add.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- সামারি এবং সাবমিট বাটন -->
+            <div class="border-top pt-3 mt-3">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary fw-medium">Sub Total:</span>
+                    <span class="fw-bold text-dark" id="lblSubTotal">0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary fw-medium">Tax/Vat Amount:</span>
+                    <span class="fw-bold text-dark" id="lblTax">0.00</span>
+                </div>
+                <div class="d-flex justify-content-between border-top pt-2 mb-4">
+                    <span class="text-dark fw-bold fs-5">Grand Total:</span>
+                    <span class="fw-bold text-success fs-4" id="lblGrandTotal">0.00</span>
+                </div>
+
+                <button type="button" onclick="submitSale()" class="btn btn-success w-100 py-3 rounded-3 fw-bold shadow-sm fs-5">
+                    <i class="fa-solid fa-cash-register me-2"></i>Complete & Print Invoice
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let cart = [];
+
+        // ১. কার্টে প্রোডাক্ট যোগ করা বা কোয়ান্টিটি বাড়ানো
+        function addToCart(id, name, price, stock) {
+            let existingItem = cart.find(item => item.productId == id);
+
+            if (existingItem) {
+                if (existingItem.quantity >= stock) {
+                    alert("Cannot add more. Out of stock!");
+                    return;
+                }
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    productId: parseInt(id),
+                    name: name,
+                    price: parseFloat(price),
+                    quantity: 1
+                });
+            }
+            updateCartUI();
+        }
+
+        // ২. কার্ট থেকে কোনো প্রোডাক্ট সম্পূর্ণ রিমুভ করা
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.productId != id);
+            updateCartUI();
+        }
+
+        // ৩. কোয়ান্টিটি ইনপুট সরাসরি চেঞ্জ করলে হ্যান্ডেল করা
+        function updateQuantity(id, qtyValue, stock) {
+            let item = cart.find(item => item.productId == id);
+            let qty = parseInt(qtyValue);
+
+            if (isNaN(qty) || qty <= 0) {
+                removeFromCart(id);
+                return;
+            }
+            if (qty > stock) {
+                alert("Requested quantity exceeds available stock!");
+                qty = stock;
+            }
+            item.quantity = qty;
+            updateCartUI();
+        }
+
+        // ৪. কার্টের ইন্টারফেস (UI) এবং হিসাব-নিকাশ আপডেট করা
+        function updateCartUI() {
+            const tbody = document.getElementById("cartTableBody");
+            tbody.innerHTML = "";
+
+            if (cart.length === 0) {
+                tbody.innerHTML = `
+                    <tr id="emptyCartRow">
+                        <td colspan="4" class="text-center py-5 text-muted small">
+                            <i class="fa-solid fa-cart-shopping fs-3 d-block mb-2 text-black-50"></i>
+                            Cart is empty. Click a product to add.
+                        </td>
+                    </tr>`;
+                document.getElementById("lblSubTotal").innerText = "0.00";
+                document.getElementById("lblTax").innerText = "0.00";
+                document.getElementById("lblGrandTotal").innerText = "0.00";
+                return;
+            }
+
+            let subTotal = 0;
+
+            cart.forEach(item => {
+                let itemTotal = item.price * item.quantity;
+                subTotal += itemTotal;
+
+                let row = `
+                    <tr>
+                        <td class="text-truncate fw-medium small" style="max-width: 140px;">${item.name}</td>
+                        <td>
+                            <input type="number" class="form-control form-control-sm text-center"
+                                   value="${item.quantity}" min="1"
+                                   onchange="updateQuantity(${item.productId}, this.value, 100)">
+                        </td>
+                        <td class="fw-semibold text-dark">${itemTotal.toFixed(2)}</td>
+                        <td>
+                            <button type="button" onclick="removeFromCart(${item.productId})" class="btn btn-link btn-sm text-danger p-0">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+                tbody.innerHTML += row;
+            });
+
+            // ডাইনামিক ট্যাক্স রেট রিড করা
+            let taxPercentageInput = parseFloat(document.getElementById("txtTaxPercentage").value);
+            let taxRate = isNaN(taxPercentageInput) || taxPercentageInput < 0 ? 0 : taxPercentageInput / 100;
+
+            let taxAmount = subTotal * taxRate;
+            let grandTotal = subTotal + taxAmount;
+
+            document.getElementById("lblSubTotal").innerText = `${subTotal.toFixed(2)}`;
+            document.getElementById("lblTax").innerText = `${taxAmount.toFixed(2)}`;
+            document.getElementById("lblGrandTotal").innerText = `${grandTotal.toFixed(2)}`;
+        }
+
+        // ৫. পুরো বিলের ডাটা AJAX এর মাধ্যমে কন্ট্রোলারে পাঠানো
+        function submitSale() {
+            if (cart.length === 0) {
+                alert("Please add at least one product to the cart.");
+                return;
+            }
+
+            let salePayload = {
+                InvoiceNumber: "@ViewBag.InvoiceNumber",
+                CustomerName: document.getElementById("customerName").value || "Walking Customer",
+                TotalAmount: parseFloat(document.getElementById("lblSubTotal").innerText),
+                Tax: parseFloat(document.getElementById("lblTax").innerText),
+                GrandTotal: parseFloat(document.getElementById("lblGrandTotal").innerText),
+                SaleDetails: cart.map(item => ({
+                    ProductId: item.productId,
+                    Quantity: item.quantity,
+                    UnitPrice: item.price,
+                    TotalPrice: item.price * item.quantity
+                }))
+            };
+
+            fetch('/Sales/Create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(salePayload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("🎉 Sale completed successfully!");
+                    // সফলভাবে সেভ হওয়ার পর জেনারেট হওয়া আইডি দিয়ে ইনভয়েস পেজে রিডাইরেক্ট
+                    window.location.href = '/Sales/Invoice/' + data.invoiceId;
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Something went wrong while processing the sale.");
+            });
+        }
+    </script>
+}
